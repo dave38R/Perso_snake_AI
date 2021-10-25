@@ -1,8 +1,8 @@
 # Perso_snake_AI
 A genetic algorithm to play a game of Snake !
 
-## test : 
-The test program isn't very important, it's where programs are tested 
+## Sandbox :
+The Sandbox program isn't very important, it's where programs are tested 
 to make sure they do what we want them to do. I always delete everything to test 
 the next program.
 
