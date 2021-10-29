@@ -92,10 +92,6 @@ def game_over():
     game_window.blit(game_over_surface, game_over_rect)
     pygame.display.flip()
 
-    # after 2 seconds we will quit the
-    # program
-    # time.sleep(5)
-
     # setup the quit possibility
     while True:
         for event in pygame.event.get():
