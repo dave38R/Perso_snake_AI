@@ -16,5 +16,10 @@ when the player loses...
 Then, there is a huge loop to run the game, which ends when the player loses.
 
 ## AI_plays_Snake : 
-In this program, the AI is controlling the Snake. 
+In this program, the AI is controlling the Snake. Right now, the AI
+has random weights and random inputs. 
+
+## Test
+The test program is here to see that the other programs work well.
+
 
