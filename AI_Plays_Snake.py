@@ -104,12 +104,18 @@ def game_over():
 
 
 # Main Function
+from Neural_Network import Net
+import numpy as np
 
 while True:
     # This is the part different from the actual snake game
 
     # handling key event
-    AI_choice = random.randint(1, 4)  # here, the AI chooses randomly a direction everytime
+
+    input_vector = np.round(np.random.randint(-1, 1, 24), 2)  # We put in a random vector
+    result = Net.forward_propagation(input_vector)  # Right now, the AI has random weights
+    decision = np.argmax(result)
+    AI_choice = decision  # here, the AI chooses randomly a direction everytime
 
     if AI_choice == 1:
         change_to = 'UP'
