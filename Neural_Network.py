@@ -77,6 +77,6 @@ class Activation:
 # https://www.statology.org/runtimewarning-overflow-encountered-in-exp/
 
 
-Net = NeuralNetwork(24, 4, Layer(18, Activation.sigmoid))  # Using the relu gives out problems with the np.exp...
+Net = NeuralNetwork(10, 4, Layer(18, Activation.sigmoid))  # Using the relu gives out problems with the np.exp...
 Net.add_layer(18, Activation.sigmoid)
 Net.add_layer(4, Activation.softmax)
