@@ -7,3 +7,5 @@ input_vector = np.round(0.1 * np.random.uniform(-1, 1, 3), 2)
 # Try to work out why it doesn't work
 layer = Layer(4, Activation.relu)
 o = layer.forward_layer(input_vector)
+
+
