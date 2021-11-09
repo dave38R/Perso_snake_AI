@@ -2,6 +2,8 @@
 
 import pygame
 import random
+from Neural_Network import Net
+import numpy as np
 
 pygame.font.init()
 pygame.init()
@@ -33,8 +35,8 @@ snake_body = [[100, 50],
               [80, 50],
               [70, 50]]
 # fruit position
-fruit_position = [random.randrange(1, (window_x // 10)) * 10,
-                  random.randrange(1, (window_y // 10)) * 10]
+fruit_list = [random.randrange(1, (window_x // 10)) * 10,
+              random.randrange(1, (window_y // 10)) * 10]
 fruit_spawn = True
 
 # setting default snake direction
@@ -46,10 +48,12 @@ change_to = direction
 score = 0
 
 
-def spawn_a_fruit(snake_body):  # We can't have a fruit spawn ON the snake.
+def spawn_a_fruit(body_list=None):  # We can't have a fruit spawn ON the snake.
+    if body_list is None:
+        body_list = snake_body
     fruit_position = [random.randrange(1, (window_x // 10)) * 10,
                       random.randrange(1, (window_y // 10)) * 10]
-    while fruit_position in snake_body:
+    while fruit_position in body_list:
         fruit_position = [random.randrange(1, (window_x // 10)) * 10,
                           random.randrange(1, (window_y // 10)) * 10]
     return fruit_position
@@ -92,10 +96,6 @@ def game_over():
     game_window.blit(game_over_surface, game_over_rect)
     pygame.display.flip()
 
-    # after 2 seconds we will quit the
-    # program
-    # time.sleep(5)
-
     # setup the quit possibility
     while True:
         for event in pygame.event.get():
@@ -103,16 +103,66 @@ def game_over():
                 quit()
 
 
-# Main Function
-from Neural_Network import Net
-import numpy as np
+# Here are the functions to get the information we want to feed our algorithm
+def get_distance(body_list, bit):
+    head = body_list[0]
+    checkpoints = []
 
+    for pos in body_list:
+
+        if head[bit] == pos[bit]:
+            checkpoints.append(pos[1 - bit] - head[1 - bit])  # We add all the distances that we get, pos or neg
+
+    pos_checkpoints = [distance for distance in checkpoints if distance > 0]  # Neg part ==> left or down parts
+    if len(pos_checkpoints) == 0:
+        pos_checkpoints.append(0)  # 0 means that there are no snake parts in that direction
+
+    neg_checkpoints = [distance for distance in checkpoints if distance < 0]  # Pos part ==> right or up parts
+    if len(neg_checkpoints) == 0:
+        neg_checkpoints.append(0)  # 0 means that there are no snake parts in that direction
+
+    distance_to_body = [max(neg_checkpoints), min(pos_checkpoints)]  # We have the pos and neg closest to the snake
+
+    return distance_to_body
+
+
+def get_info_body(body_list):
+    distance_to_body_x = get_distance(body_list, 0)
+    distance_to_body_y = get_distance(body_list, 1)
+
+    return distance_to_body_x, distance_to_body_y
+
+
+def get_info(body_list=None, fruit_position=None):
+    if fruit_position is None:
+        fruit_position = fruit_list
+    if body_list is None:
+        body_list = snake_body
+    head = body_list[0]
+    info_vector = []
+    info_vector.append(head[0])  # Distance to left wall
+    info_vector.append(window_x - head[0])  # Distance to right wall
+    info_vector.append(head[1])  # Distance to bottom wall
+    info_vector.append(window_y - head[1])  # Distance to top wall
+    info_vector.append(fruit_position[0] - head[0])  # Distance to fruit along the x axis
+    info_vector.append(fruit_position[1] - head[1])  # Distance to fruit along the y axis
+    info_vector.append(get_info_body(body_list)[0][0])  # Distance to body on the bottom
+    info_vector.append(get_info_body(body_list)[0][1])  # Distance to body on the top
+    info_vector.append(get_info_body(body_list)[1][0])  # Distance to body on the left
+    info_vector.append(get_info_body(body_list)[1][1])  # Distance to body on the right
+
+    return info_vector
+
+
+# Main Function
 while True:
     # This is the part different from the actual snake game
 
-    # handling key event
+    # Let's collect the information that the snake needs to know
+    # We create a vector containing it, no need to order the information particularly
 
-    input_vector = np.round(np.random.randint(-1, 1, 24), 2)  # We put in a random vector
+    # handling key event
+    input_vector = 0.1*np.array(get_info(snake_body, fruit_list))
     result = Net.forward_propagation(input_vector)  # Right now, the AI has random weights
     decision = np.argmax(result)
     AI_choice = decision  # here, the AI chooses randomly a direction everytime
@@ -152,7 +202,7 @@ while True:
     # if fruits and snakes collide then scores will be
     # incremented by 10
     snake_body.insert(0, list(snake_position))
-    if snake_position[0] == fruit_position[0] and snake_position[1] == fruit_position[1]:
+    if snake_position[0] == fruit_list[0] and snake_position[1] == fruit_list[1]:
         score += 10
         fruit_spawn = False
     else:
@@ -160,7 +210,7 @@ while True:
 
     if not fruit_spawn:
         # Put a function spawn_a_fruit(snake_body) to prevent a fruit from spawning on the snake body
-        fruit_position = spawn_a_fruit(snake_body)
+        fruit_list = spawn_a_fruit(snake_body)
 
     fruit_spawn = True
     game_window.fill(black)
@@ -172,7 +222,7 @@ while True:
         snake_body[0][0], snake_body[0][1], 10, 10))
 
     pygame.draw.rect(game_window, red, pygame.Rect(
-        fruit_position[0], fruit_position[1], 10, 10))
+        fruit_list[0], fruit_list[1], 10, 10))
 
     # Game Over conditions
     if snake_position[0] < 0 or snake_position[0] > window_x - 10:
@@ -193,3 +243,4 @@ while True:
 
     # Frame Per Second /Refresh Rate
     fps.tick(snake_speed)
+
