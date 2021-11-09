@@ -25,7 +25,7 @@ fps = pygame.time.Clock()
 
 # defining snake default position
 snake_position = [100, 50]
-snake_speed = 15
+snake_speed = 20
 # defining first 4 blocks of snake
 # body
 snake_body = [[100, 50],
