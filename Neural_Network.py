@@ -8,7 +8,7 @@ import numpy as np
 class Neuron:
     def __init__(self, input_size):
         self.size = input_size
-        self.weights = np.round(10 * np.random.uniform(-1, 1, input_size + 1), 2)  # The +1 corresponds to the bias
+        self.weights = np.random.normal(0, 1, input_size + 1)  # The +1 corresponds to the bias
 
 
 # It's hard to say if we should say 10* or 100* or 0.1*, check that with the np.exp error that we get if we use the relu
