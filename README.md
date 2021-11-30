@@ -30,5 +30,6 @@ when we want to evaluate the AI.
 Training functions is where the magic happens and we code all the functions related to genetic algorithms architecture. 
 ## Test
 The test program is here to see that the other programs work well.
+Speaking of test, here's Elliot's one.
 
 
