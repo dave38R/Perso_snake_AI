@@ -31,4 +31,4 @@ Training functions is where the magic happens and we code all the functions rela
 ## Test
 The test program is here to see that the other programs work well. No more Elliot's test.
 
-
+Hello c'est Lola
