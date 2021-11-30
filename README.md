@@ -32,6 +32,4 @@ Training functions is where the magic happens and we code all the functions rela
 The test program is here to see that the other programs work well. No more Elliot's test.
 
 
-##Commit du champion:
-###Etape :
-Suis-je là ?
+Hello Assane is here !
