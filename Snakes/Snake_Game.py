@@ -1,49 +1,14 @@
 # This code is from this website : https://www.geeksforgeeks.org/snake-game-in-python-using-pygame-module/
 
 import pygame
-import random
+from Game_Parameters import *
 
 pygame.font.init()
 pygame.init()
 
-# Window size
-window_x = 450
-window_y = 300
-# defining colors
-black = pygame.Color(0, 0, 0)
-white = pygame.Color(255, 255, 255)
-red = pygame.Color(255, 0, 0)
-green = pygame.Color(0, 255, 0)
-blue = pygame.Color(0, 0, 255)
-
 # Initialise game window
 pygame.display.set_caption("David's Snake Game !")
 game_window = pygame.display.set_mode((window_x, window_y))
-
-# FPS (frames per second) controller
-fps = pygame.time.Clock()
-
-# defining snake default position
-snake_position = [100, 50]
-snake_speed = 15
-# defining first 4 blocks of snake
-# body
-snake_body = [[100, 50],
-              [90, 50],
-              [80, 50],
-              [70, 50]]
-# fruit position
-fruit_position = [random.randrange(1, (window_x // 10)) * 10,
-                  random.randrange(1, (window_y // 10)) * 10]
-fruit_spawn = True
-
-# setting default snake direction
-# towards right
-direction = 'RIGHT'
-change_to = direction
-
-# initial score
-score = 0
 
 
 def spawn_a_fruit(snake_body):  # We can't have a fruit spawn ON the snake.
@@ -119,6 +84,10 @@ def play_game(change_to='RIGHT', direction='RIGHT', fruit_list=fruit_position, f
                     change_to = 'LEFT'
                 if event.key == pygame.K_RIGHT:
                     change_to = 'RIGHT'
+                if event.key == pygame.K_p:
+                    pygame.time.delay(10000)
+                    print('snake_body', snake_body)
+                    print('fruit_position', fruit_list)
 
         # we don't want snake to start going backwards and die
         if change_to == 'UP' and direction != 'DOWN':
@@ -187,4 +156,5 @@ def play_game(change_to='RIGHT', direction='RIGHT', fruit_list=fruit_position, f
 
     return score
 
-print(play_game())
+
+play_game()
