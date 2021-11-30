@@ -31,7 +31,3 @@ Training functions is where the magic happens and we code all the functions rela
 ## Test
 The test program is here to see that the other programs work well. It's in my branch yay. 
 
-
-Hello Assane is here !!
-Hello Lola is here !
-lll
